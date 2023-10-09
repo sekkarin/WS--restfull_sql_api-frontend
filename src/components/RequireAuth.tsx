@@ -28,8 +28,6 @@ const RequireAuth = ({ allowedRoles }: Props) => {
     : undefined;
 
   const roles = decoded?.roles || [];
-  console.log(decoded);
-  
 
   return roles.map((role: Role) => allowedRoles.includes(role)).find((value) => value == true) ? (
     <Outlet />

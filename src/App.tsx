@@ -12,6 +12,8 @@ import RequireAuth from "./components/RequireAuth";
 import { Roles } from "./enums/Rols";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
+import UpdateRestaurant from "./pages/UpdateRestuarant";
+import NewRestaurant from "./pages/NewRestuarant";
 
 function App() {
   return (
@@ -45,6 +47,16 @@ function App() {
         </Route>
         <Route element={<RequireAuth allowedRoles={[]} />}>
           <Route path="admin" element={<Admin />} />
+        </Route>
+        <Route
+          element={<RequireAuth allowedRoles={[Roles.USER, Roles.ADMIN]} />}
+        >
+          <Route path="updateRestuarant/:id" element={<UpdateRestaurant />} />
+        </Route>
+        <Route
+          element={<RequireAuth allowedRoles={[ Roles.ADMIN]} />}
+        >
+          <Route path="newRestaurant" element={<NewRestaurant />} />
         </Route>
 
         {/* <Route element={<PersistLogin />}>

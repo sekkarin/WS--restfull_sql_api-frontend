@@ -23,6 +23,12 @@ const index = () => {
       <Link to="/admin" className="text-blue-600 hover:text-blue-400">
         Admin Page
       </Link>
+      <Link to="/" className="text-blue-600 hover:text-blue-400">
+        Update Restaurant Page
+      </Link>
+      <Link to="/newRestaurant" className="text-blue-600 hover:text-blue-400">
+        New Restaurant Page
+      </Link>
     </section>
   );
 };

@@ -45,17 +45,17 @@ const Register = () => {
     formFileData.append("file", file);
     // console.log(formFileData.get("file"));
 
-    const fileUpload = await axios.post("/auth/upload", formFileData);
+    // const fileUpload = await axios.post("/auth/upload", formFileData);
     // console.log(fileUpload);
 
     for (const [key, value] of Object.entries(formInput)) {
       // console.log(`${key} ${value}`);
       formData.append(key, value);
     }
-    formData.append("profileUrl", fileUpload.data.filename);
+    // formData.append("profileUrl", fileUpload.data.filename);
     const res = await axios.post("/auth/register", {
       ...formInput,
-      profileUrl: fileUpload.data.filename,
+      // profileUrl: fileUpload.data.filename,
     });
     if (res.status == 200) {
       // console.log("Registered successfully");

@@ -1,5 +1,4 @@
 import axios from "../apis/axios";
-// import { AxiosError } from "axios";
 
 import { useAppDispatch } from "./useStore";
 import { setCredentials } from "../stores/slices/authSlice";

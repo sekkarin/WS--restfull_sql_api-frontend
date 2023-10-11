@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 
-// type Props = {};
-
 const Missing = () => {
   const navigate = useNavigate();
   const goBack = () => navigate(-1);

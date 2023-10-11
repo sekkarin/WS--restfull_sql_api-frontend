@@ -27,7 +27,6 @@ const UpdateRestaurant = () => {
   }, []);
 
   const handleOnSubmit = async () => {
-    // console.log(restaurant);
 
     const res = await axiosPrivate.put(`/restaurants/${id}`, {
       name: restaurant?.name,

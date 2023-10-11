@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+
 import "./App.css";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
@@ -10,7 +11,7 @@ import Home from "./pages/Home";
 import RegisterSuccess from "./pages/RegisterSuccess";
 import RequireAuth from "./components/RequireAuth";
 import { Roles } from "./enums/Rols";
-import Profile from "./pages/Profile";
+// import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
 import UpdateRestaurant from "./pages/UpdateRestuarant";
 import NewRestaurant from "./pages/NewRestuarant";
@@ -36,7 +37,7 @@ function App() {
         >
           <Route path="/" element={<Home />} />
         </Route>
-        <Route
+        {/* <Route
           element={
             <RequireAuth
               allowedRoles={[Roles.USER, Roles.EDITOR, Roles.ADMIN]}
@@ -44,8 +45,8 @@ function App() {
           }
         >
           <Route path="profile" element={<Profile />} />
-        </Route>
-        <Route element={<RequireAuth allowedRoles={[]} />}>
+        </Route> */}
+        <Route element={<RequireAuth allowedRoles={[Roles.ADMIN]} />}>
           <Route path="admin" element={<Admin />} />
         </Route>
         <Route
@@ -53,32 +54,9 @@ function App() {
         >
           <Route path="updateRestuarant/:id" element={<UpdateRestaurant />} />
         </Route>
-        <Route
-          element={<RequireAuth allowedRoles={[ Roles.ADMIN]} />}
-        >
+        <Route element={<RequireAuth allowedRoles={[Roles.ADMIN]} />}>
           <Route path="newRestaurant" element={<NewRestaurant />} />
         </Route>
-
-        {/* <Route element={<PersistLogin />}>
-          <Route element={<RequireAuth allowedRoles={[ROLE.USER]} />}>
-            <Route path="/" element={<Home />} />
-          </Route>
-
-          <Route element={<RequireAuth allowedRoles={[ROLE.EDITOR]} />}>
-            <Route path="editor" element={<Editor />} />
-          </Route>
-
-          <Route element={<RequireAuth allowedRoles={[ROLE.ADMIN]} />}>
-            <Route path="admin" element={<Admin />} />
-          </Route>
-
-          <Route
-            element={<RequireAuth allowedRoles={[ROLE.EDITOR, ROLE.ADMIN]} />}
-          >
-            <Route path="lounge" element={<Lounge />} />
-          </Route>
-        </Route> */}
-
         {/* catch all */}
         <Route path="*" element={<Missing />} />
       </Route>

@@ -43,22 +43,15 @@ const Register = () => {
     const formData = new FormData();
     const formFileData = new FormData();
     formFileData.append("file", file);
-    // console.log(formFileData.get("file"));
-
-    // const fileUpload = await axios.post("/auth/upload", formFileData);
-    // console.log(fileUpload);
 
     for (const [key, value] of Object.entries(formInput)) {
-      // console.log(`${key} ${value}`);
       formData.append(key, value);
     }
-    // formData.append("profileUrl", fileUpload.data.filename);
+
     const res = await axios.post("/auth/register", {
       ...formInput,
-      // profileUrl: fileUpload.data.filename,
     });
     if (res.status == 200) {
-      // console.log("Registered successfully");
       setFromInput({
         username: "",
         password: "",
@@ -72,7 +65,6 @@ const Register = () => {
       navigation("/registerSuccess");
     }
   };
-  // console.log(formInput.profileUrl);
 
   return (
     <main className="flex flex-1 flex-col drop-shadow-lg bg-white rounded-md p-3 mt-20 md:max-w-md md:mx-auto mx-5 mb-5">

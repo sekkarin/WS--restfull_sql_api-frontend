@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
+
 import useRefreshToken from "../hooks/useRefreshToken";
 import { useAppSelector } from "../hooks/useStore";
 
@@ -24,11 +25,6 @@ const PersistLogin = () => {
     // Avoids unwanted call to verifyRefreshToken
     !auth?.accessToken ? verifyRefreshToken() : setIsLoading(false);
   }, []);
-
-  // useEffect(() => {
-  //   console.log(`isLoading: ${isLoading}`);
-  //   console.log(`accessToken : ${JSON.stringify(auth?.accessToken)}`);
-  // }, [isLoading]);
 
   return (
     <>

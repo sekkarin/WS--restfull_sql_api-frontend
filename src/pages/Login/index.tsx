@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+
 import axios from "../../apis/axios";
 import { useAppDispatch } from "../../hooks/useStore";
 import { setCredentials } from "../../stores/slices/authSlice";
@@ -31,8 +32,6 @@ const Login = () => {
         withCredentials: true,
       }
     );
-    // console.log(res.data);
-
     if (res.status === 200) {
       dispatch(
         setCredentials({

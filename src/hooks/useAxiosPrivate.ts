@@ -10,8 +10,6 @@ const useAxiosPrivate = () => {
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
       (config) => {
-        // console.log("!!!",config.headers["Authorization"]);
-
         if (!config.headers["Authorization"]) {
           config.headers["Authorization"] = `Bearer ${auth.accessToken}`;
         }
@@ -29,7 +27,6 @@ const useAxiosPrivate = () => {
           pervRequest.sent = true;
 
           const newAccessToken = await refresh();
-          // console.log(newAccessToken);
 
           pervRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
 

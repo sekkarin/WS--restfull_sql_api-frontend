@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 
-// type Props = {};
-
 const Unauthorized = () => {
   const navigate = useNavigate();
   return (

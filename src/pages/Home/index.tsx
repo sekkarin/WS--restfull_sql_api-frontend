@@ -15,8 +15,8 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const signOut = async () => {
-    dispatcher(logOut());
     await axiosPrivate.get("/auth/logout");
+    dispatcher(logOut());
   };
 
   useEffect(() => {

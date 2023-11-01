@@ -7,12 +7,13 @@ const useRefreshToken = () => {
   const dispatch = useAppDispatch();
   const refresh = async () => {
     try {
-      const response = await axios("/auth/refreshToken", {
+      const response = await axios.get("/auth/refreshToken", {
         headers: {
           "Content-Type": "application/json",
         },
         withCredentials: true,
       });
+
       dispatch(setCredentials({ accessToken: response.data.accessToken }));
       return response.data.accessToken;
     } catch (error) {

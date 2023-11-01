@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "../../apis/axios";
 import { useAppDispatch } from "../../hooks/useStore";
 import { setCredentials } from "../../stores/slices/authSlice";
+import SpinLoading from "../../components/SpinLoading";
 interface Form {
   username: string;
   password: string;
@@ -13,6 +14,7 @@ const Login = () => {
   const navigation = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+  const [isLoading, setIsLoading] = useState(false);
 
   const [formInput, setFromInput] = useState<Form>({
     username: "",
@@ -20,30 +22,37 @@ const Login = () => {
   });
 
   const onSubmitted = async () => {
-    const res = await axios.post(
-      "/auth/login",
-      {
-        ...formInput,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
+    setIsLoading(true);
+    try {
+      const res = await axios.post(
+        "/auth/login",
+        {
+          ...formInput,
         },
-        withCredentials: true,
-      }
-    );
-    if (res.status === 200) {
-      dispatch(
-        setCredentials({
-          accessToken: res.data.accessToken,
-          user: formInput.username,
-        })
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
       );
-      setFromInput({
-        username: "",
-        password: "",
-      });
-      navigation(from, { replace: true });
+      if (res.status === 200) {
+        dispatch(
+          setCredentials({
+            accessToken: res.data.accessToken,
+            user: formInput.username,
+          })
+        );
+        setFromInput({
+          username: "",
+          password: "",
+        });
+        navigation(from, { replace: true });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -80,9 +89,15 @@ const Login = () => {
         onClick={() => {
           onSubmitted();
         }}
-        className="mt-8 mb-5   bg-emerald-500 p-2 rounded-xl text-white hover:bg-emerald-400"
+        className="mt-8 mb-5   bg-emerald-500 p-2 rounded-xl text-white hover:bg-emerald-400 text-center"
       >
-        เข้าสู่ระบบ
+        {isLoading ? (
+          <div className="text-center mx-48">
+            <SpinLoading />
+          </div>
+        ) : (
+          "เข้าสู่ระบบ"
+        )}
       </button>
       <Link
         to={"/register"}

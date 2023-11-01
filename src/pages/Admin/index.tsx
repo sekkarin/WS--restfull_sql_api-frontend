@@ -5,6 +5,8 @@ import { useAppDispatch } from "../../hooks/useStore";
 import { logOut } from "../../stores/slices/authSlice";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { Restaurant } from "../../interfaces/Restaurant";
+import SpinLoading from "../../components/SpinLoading";
+import CartLoading from "../../components/CardLoading";
 
 const Admin = () => {
   const axiosPrivate = useAxiosPrivate();
@@ -12,6 +14,8 @@ const Admin = () => {
   const navigation = useNavigate();
   const [reload, setReload] = useState(false);
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(false);
 
   const signOut = async () => {
     dispatcher(logOut());
@@ -19,17 +23,31 @@ const Admin = () => {
   };
 
   const handleDelete = async (id?: number) => {
-    const res = await axiosPrivate.delete(`/restaurants/${id}`);
+    setIsLoading(true);
+    try {
+      const res = await axiosPrivate.delete(`/restaurants/${id}`);
 
-    if (res.status === 200) {
-      setReload((prev) => !prev);
+      if (res.status === 200) {
+        setReload((prev) => !prev);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
     (async () => {
-      const res = await axiosPrivate("/restaurants");
+      setIsLoadingData(true);
+      try {
+        const res = await axiosPrivate("/restaurants");
 
-      setRestaurants(res.data);
+        setRestaurants(res.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoadingData(false);
+      }
     })();
   }, [reload]);
   return (
@@ -76,29 +94,41 @@ const Admin = () => {
       </header>
       <section className="">
         <div className="grid grid-rows-4 grid-cols-4 gap-4 sm:grid-cols-2 md:grid-cols-4">
-          {restaurants.map((item) => (
-            <div key={item.id} className="p-2 bg-neutral-50 rounded-sm">
-              <img src={item.imageUrl} className="mb-2 rounded-md" alt="" />
-              <h6>{item.name}</h6>
-              <h2>{item.type}</h2>
-              <button
-                onClick={() => {
-                  handleDelete(item?.id);
-                }}
-                className="bg-red-500 rounded-md p-2 mt-2 mr-1"
-              >
-                ลบ
-              </button>
-              <button
-                onClick={() => {
-                  navigation(`../updateRestuarant/${item.id}`);
-                }}
-                className="bg-yellow-400 rounded-md p-2"
-              >
-                แก้ใข
-              </button>
-            </div>
-          ))}
+          {isLoadingData ? (
+            <>
+              <CartLoading/>
+              <CartLoading/>
+              <CartLoading/>
+              <CartLoading/>
+              <CartLoading/>
+              <CartLoading/>
+              <CartLoading/>
+            </>
+          ) : (
+            restaurants.map((item) => (
+              <div key={item.id} className="p-2 bg-neutral-50 rounded-sm">
+                <img src={item.imageUrl} className="mb-2 rounded-md" alt="" />
+                <h6>{item.name}</h6>
+                <h2>{item.type}</h2>
+                <button
+                  onClick={() => {
+                    handleDelete(item?.id);
+                  }}
+                  className="bg-red-500 rounded-md p-2 mt-2 mr-1"
+                >
+                  {isLoading ? <SpinLoading /> : "ลบ"}
+                </button>
+                <button
+                  onClick={() => {
+                    navigation(`../updateRestuarant/${item.id}`);
+                  }}
+                  className="bg-yellow-400 rounded-md p-2"
+                >
+                  แก้ใข
+                </button>
+              </div>
+            ))
+          )}
         </div>
       </section>
     </>

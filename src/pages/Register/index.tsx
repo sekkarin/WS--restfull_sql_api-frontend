@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import axios from "../../apis/axios";
+import SpinLoading from "../../components/SpinLoading";
 
 export interface Form {
   username: string;
@@ -16,6 +17,7 @@ export interface Form {
 
 const Register = () => {
   const navigation = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [formInput, setFromInput] = useState<Form>({
     username: "",
     password: "",
@@ -40,29 +42,36 @@ const Register = () => {
   };
 
   const onSubmitted = async () => {
-    const formData = new FormData();
-    const formFileData = new FormData();
-    formFileData.append("file", file);
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      const formFileData = new FormData();
+      formFileData.append("file", file);
 
-    for (const [key, value] of Object.entries(formInput)) {
-      formData.append(key, value);
-    }
+      for (const [key, value] of Object.entries(formInput)) {
+        formData.append(key, value);
+      }
 
-    const res = await axios.post("/auth/register", {
-      ...formInput,
-    });
-    if (res.status == 200) {
-      setFromInput({
-        username: "",
-        password: "",
-        name: "",
-        email: "",
-        role: {
-          User: "USER",
-        },
-        profileUrl: "",
+      const res = await axios.post("/auth/register", {
+        ...formInput,
       });
-      navigation("/registerSuccess");
+      if (res.status == 200) {
+        setFromInput({
+          username: "",
+          password: "",
+          name: "",
+          email: "",
+          role: {
+            User: "USER",
+          },
+          profileUrl: "",
+        });
+        navigation("/registerSuccess");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -151,7 +160,7 @@ const Register = () => {
         type="button"
         className="mt-8 mb-5   bg-emerald-500 p-2 rounded-xl text-white hover:bg-emerald-400"
       >
-        สมัครสมาชิก
+        {isLoading ? <SpinLoading /> : "สมัครสมาชิก"}
       </button>
       <Link
         to={"/login"}

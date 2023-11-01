@@ -5,12 +5,14 @@ import { useAppDispatch } from "../../hooks/useStore";
 import { logOut } from "../../stores/slices/authSlice";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { Restaurant } from "../../interfaces/Restaurant";
+import CartLoading from "../../components/CardLoading";
 
 const Home = () => {
   const axiosPrivate = useAxiosPrivate();
   const dispatcher = useAppDispatch();
   const navigation = useNavigate();
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const signOut = async () => {
     dispatcher(logOut());
@@ -19,16 +21,23 @@ const Home = () => {
 
   useEffect(() => {
     (async () => {
-      const res = await axiosPrivate("/restaurants");
+      setIsLoading(true);
+      try {
+        const res = await axiosPrivate("/restaurants");
 
-      setRestaurants(res.data);
+        setRestaurants(res.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
     })();
   }, []);
   return (
     <>
       <header className="flex flex-row justify-between p-2">
         <ul className="flex flex-row gap-2">
-          <li className="font-bold text-lg cursor-pointer" >KEN FOOD</li>
+          <li className="font-bold text-lg cursor-pointer">KEN FOOD</li>
 
           <li>
             <button
@@ -60,15 +69,26 @@ const Home = () => {
           </button>
         </div>
       </header>
-      <section className="">
+      <section className="p-2">
         <div className="grid grid-rows-4 grid-cols-4 gap-4 sm:grid-cols-2 md:grid-cols-4">
-          {restaurants.map((item) => (
-            <div key={item.id} className="p-2 bg-neutral-50 rounded-sm">
-              <img src={item.imageUrl} className="mb-2 rounded-md" alt="" />
-              <h6>{item.name}</h6>
-              <h2>{item.type}</h2>
-            </div>
-          ))}
+          {isLoading ? (
+            <>
+              <CartLoading />
+              <CartLoading />
+              <CartLoading />
+              <CartLoading />
+              <CartLoading />
+              <CartLoading />
+            </>
+          ) : (
+            restaurants.map((item) => (
+              <div key={item.id} className="p-2 bg-neutral-50 rounded-sm">
+                <img src={item.imageUrl} className="mb-2 rounded-md" alt="" />
+                <h6>{item.name}</h6>
+                <h2>{item.type}</h2>
+              </div>
+            ))
+          )}
         </div>
       </section>
     </>
